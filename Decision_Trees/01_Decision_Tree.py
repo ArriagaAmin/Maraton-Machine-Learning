@@ -1,11 +1,11 @@
 from math import log
 
-class nodo:
-  def __init__(self, padre):
-    self.padre = padre
-    self.hijos = []
+class node:
+  def __init__(self, parent):
+    self.parent = parent
+    self.childs = []
     self.cond = []
-    self.hoja = True
+    self.leaf = True
     self.value = None
 
 class decision_tree:
@@ -31,7 +31,7 @@ class decision_tree:
         if not x[i] in values[i]: values[i].append(x[i])
     return values
 
-  def ganancia(self, a, values, X, Y):
+  def gain(self, a, values, X, Y):
     """ Calculamos la ganancia de un atributo en especifico. """
     p = sum(1 for y in Y if y == 1)
     n = sum(1 for y in Y if y == 0)
@@ -45,21 +45,21 @@ class decision_tree:
   def train(self):
     self.train_T(self.X, self.Y, self.get_values(self.X), 0, None)
 
-  def train_T(self, X, Y, values, por_defecto, padre):
-    hijo = nodo(padre)
-    if padre != None: padre.hijos.append(hijo)
+  def train_T(self, X, Y, values, por_defecto, parent):
+    child = node(parent)
+    if parent != None: parent.childs.append(child)
     
-    if len(X) == 0: hijo.value = por_defecto
-    elif all(Y[0] == y for y in Y): hijo.value = Y[0]
-    elif len(X[0]) == 0: hijo.value = int(sum(1 for y in Y if y == 1) > sum(1 for y in Y if y == 0))
+    if len(X) == 0: child.value = por_defecto
+    elif all(Y[0] == y for y in Y): child.value = Y[0]
+    elif len(X[0]) == 0: child.value = int(sum(1 for y in Y if y == 1) > sum(1 for y in Y if y == 0))
     else:
-      hijo.hoja = False
+      child.leaf = False
 
       # Obtenemos el mejor atributo.
       best = -1
       best_g = -1
       for a in range(len(X[0])):
-        g = self.ganancia(a, values[a], X, Y)
+        g = self.gain(a, values[a], X, Y)
         if g > best_g:
           best_g = g
           best = a
@@ -76,20 +76,20 @@ class decision_tree:
             x.pop(a)
             X_i.append(x)
             Y_i.append(Y[i])
-        hijo.cond.append((a, v))
+        child.cond.append((a, v))
 
         values_i = self.get_values(X_i)
-        self.train_T(X_i, Y_i, values_i, m, hijo)
-    self.tree = hijo
+        self.train_T(X_i, Y_i, values_i, m, child)
+    self.tree = child
 
   def predict(self, x):
     node_i = self.tree
     x_i = x.copy()
     while True:
-      if node_i.hoja: return node_i.value
+      if node_i.leaf: return node_i.value
       for i, c in enumerate(node_i.cond):
         if x_i[c[0]] == c[1]:
-          node_i = node_i.hijos[i]
+          node_i = node_i.childs[i]
           x_i.pop(c[0])
           break
 
@@ -98,14 +98,14 @@ class decision_tree:
     if atr == None: atr_i = self.atr_name.copy()
     else: atr_i = atr.copy()
     
-    if node_i.hoja: 
+    if node_i.leaf: 
       text = " -> " + str(bool(node_i.value))
     else:
       best = node_i.cond[0][0]
       text = "\n" + level*"|  " + "_ " + atr_i.pop(best)
       for i, c in enumerate(node_i.cond):
         text += "\n" + (level+1)*"|  " + " * " + str(c[1])
-        text += self.print_tree(node_i.hijos[i], level+1, atr_i)
+        text += self.print_tree(node_i.childs[i], level+1, atr_i)
       text += "\n" + (level)*"|  " + "-"
     return text
 
