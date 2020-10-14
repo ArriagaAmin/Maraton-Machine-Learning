@@ -48,8 +48,8 @@ class DecisionTree:
     return r 
 
   def mayoria(self, Y):
-    # Retorna la moda de un arreglo de elementos unitarios, ejemplo:
-    # [[0], [1], [0]] -> mayoria = 0
+    """ Retorna la moda de un arreglo de elementos unitarios, ejemplo:
+     [[0], [1], [0]] -> mayoria = 0"""
     dic = {}
     for y in Y:
       if y[0] in dic: dic[y[0]] += 1
@@ -133,6 +133,7 @@ class DecisionTree:
         elif X[i][a]>=d: 
           dic[y[0]] = 1
           N_i += 1
+
       # Calculamos la entropia de una de las divisiones.
       e = N_i*self.crit(*[dic[d]/N_i for d in dic])/N
 
@@ -157,7 +158,9 @@ class DecisionTree:
     # Retornamos la entropia actual menos la de las divisiones
     return r - min_e, best_d
 
-  def train(self, splits = -1, criterio="Entropy"):
+  def train(self, splits = -1, criterio="Gini"):
+    """ Entrenamos el arbol de decisiones segun el numero de divisiones
+    y el criterio de division."""
     if criterio == "Entropy": self.crit = self.entropy
     elif criterio == "Gini": self.crit = self.gini
 
@@ -248,21 +251,26 @@ class DecisionTree:
     # Partimos de la raiz.
     node_i = self.tree
     x_i = x.copy()
-    while True:
-      # Si el nodo actual es una hoja, retornamos su valor.
-      if node_i.leaf: return node_i.value
+    # Mientras no estemos en una hoja
+    while not node_i.leaf:
       # En caso contrario, verificamos cual condicion del nodo cumple el patron
       # y lo enviamos al hijo correspondiente.
+      cond = False
       for i, c in enumerate(node_i.cond):
         if len(c) == 2:
           if x_i[c[0]] == c[1]:
             node_i = node_i.childs[i]
             x_i.pop(c[0])
+            cond = True
             break
         elif (c[1] == "<" and x_i[c[0]] < c[2]) or \
           (c[1] == ">=" and x_i[c[0]] >= c[2]):
           node_i = node_i.childs[i]
+          cond = True
           break
+
+      if not cond: return node_i.default
+    return node_i.value
 
   def print_tree(self, node_i = None, level = 0, atr = None):
     """ Retornamos una representacion del arbol. """
@@ -280,7 +288,7 @@ class DecisionTree:
         text += "\n" + (level+1)*"|  " + " * " + str(c[1])
         if len(c) == 3: text += str(c[2])
         text += self.print_tree(node_i.childs[i], level+1, atr_i)
-      text += "\n" + (level)*"|  " + "-"
+      text += "\n" + (level)*"|  " + "|_"
     return text
 
 
@@ -296,10 +304,9 @@ if __name__ == "__main__":
   IA = DecisionTree(X, Y, 
     ["Cont", "Catg"],
     ["UNIDADES", "DESTINO"],
-    None
     )
 
-  IA.train_C(4, "Gini")
+  IA.train(4, "Gini")
   print(IA.print_tree())
 
 
