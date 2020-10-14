@@ -45,11 +45,11 @@ class decision_tree:
   def train(self):
     self.train_T(self.X, self.Y, self.get_values(self.X), 0, None)
 
-  def train_T(self, X, Y, values, por_defecto, parent):
+  def train_T(self, X, Y, values, default, parent):
     child = node(parent)
     if parent != None: parent.childs.append(child)
     
-    if len(X) == 0: child.value = por_defecto
+    if len(X) == 0: child.value = default
     elif all(Y[0] == y for y in Y): child.value = Y[0]
     elif len(X[0]) == 0: child.value = int(sum(1 for y in Y if y == 1) > sum(1 for y in Y if y == 0))
     else:
