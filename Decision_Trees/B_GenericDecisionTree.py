@@ -23,7 +23,7 @@ class Node:
     self.value = None
 
 class DecisionTree:
-  def __init__(self, X, Y, atr_types, atr_name):
+  def __init__(self, X, Y, atr_types, atr_name, atr_avail):
     # Ejemplos de entrenamiento.
     self.X = X
     # Etiquetas de los ejemplos.
@@ -34,6 +34,8 @@ class DecisionTree:
     self.atr_types = atr_types
     # Nombres de los atributos de los ejemplos de entrenamiento.
     self.atr_name = atr_name
+    # Atributos disponibles
+    self.atr_avail = atr_avail
 
   def gini(self, *P):
     """ Gini impurity."""
@@ -167,6 +169,7 @@ class DecisionTree:
     root = Node(None, self.X, self.Y, self.atr_types, self.mayoria(self.Y))
     queue = [root]
     self.tree = root
+    atr_avail = self.atr_avail
 
     # Usaremos un BFS en vez de DFS.
     while len(queue) > 0:
@@ -178,7 +181,7 @@ class DecisionTree:
       # sera el valor del nodo.
       elif all(node.Y[0] == y for y in node.Y): node.value = node.Y[0][0]
       # Si los ejemplos no tienen mas atributos, tomamos la moda de las etiquetas.
-      elif len(node.X[0]) == 0 or splits == 0: node.value = self.mayoria(node.Y)
+      elif all(atr == 0 for atr in atr_avail) or splits == 0: node.value = self.mayoria(node.Y)
       # Si no, se realizara una division.
       else:
         node.leaf = False
@@ -190,34 +193,36 @@ class DecisionTree:
         best_g = -1
         div = -1
         for a in range(len(node.X[0])):
-          values = self.get_values(node.X, a)
-          if node.atr_types[a] == "Catg": 
-            g = self.gain_catg(a, values, node.X, node.Y)
-            if g > best_g:
-              best_g = g 
-              best = a
-          else: 
-            g, div = self.gain_cont(a, values, node.X, node.Y)
-            if g > best_g:
-              best_g = g 
-              best = a
-              best_d = div
+          if atr_avail[a] != 0:
+            values = self.get_values(node.X, a)
+            if node.atr_types[a] == "Catg": 
+              g = self.gain_catg(a, values, node.X, node.Y)
+              if g > best_g:
+                best_g = g 
+                best = a
+            else: 
+              g, div = self.gain_cont(a, values, node.X, node.Y)
+              if g > best_g:
+                best_g = g 
+                best = a
+                best_d = div
       
         # Verificamos si el mejor atributo es categorico o continuo.
         if node.atr_types[best] == "Catg":
+          atr_avail[best] = 0
           # Particionamos los ejemplos segun cada valor del mejor atributo.
           for v in self.get_values(node.X, best):
             X_i, Y_i = [], []
             for i in range(len(node.X)):
               if node.X[i][best] == v:
                 x = node.X[i].copy()
-                x.pop(best)
+                x[best] = None
                 X_i.append(x)
                 Y_i.append(node.Y[i]) 
 
             # Creamos un nuevo nodo hijo con un bloque de la particion de los ejemplos.
             atr_types_i = node.atr_types.copy()
-            atr_types_i.pop(best)
+            atr_types_i[best] = None
             child = Node(node, X_i, Y_i, atr_types_i, self.mayoria(Y_i))
             node.childs.append(child)
             node.cond.append((best, v))
@@ -260,7 +265,6 @@ class DecisionTree:
         if len(c) == 2:
           if x_i[c[0]] == c[1]:
             node_i = node_i.childs[i]
-            x_i.pop(c[0])
             cond = True
             break
         elif (c[1] == "<" and x_i[c[0]] < c[2]) or \
@@ -282,7 +286,7 @@ class DecisionTree:
       text = " -> " + str(node_i.value)
     else:
       best = node_i.cond[0][0]
-      if len(node_i.cond[0]) == 2: text = "\n" + level*"|  " + "_ " + atr_i.pop(best)
+      if len(node_i.cond[0]) == 2: text = "\n" + level*"|  " + "_ " + atr_i[best]
       else: text = "\n" + level*"|  " + "_ " + atr_i[best]
       for i, c in enumerate(node_i.cond):
         text += "\n" + (level+1)*"|  " + " * " + str(c[1])
@@ -291,26 +295,20 @@ class DecisionTree:
       text += "\n" + (level)*"|  " + "|_"
     return text
 
-
 if __name__ == "__main__":
   X = [
-    [5,"Esp"], [9,"Eur"], [0,"Eur"], [3,"Esp"], [8,"Eur"], 
-    [24,"Esp"], [45,"Esp"], [11,"Eur"], [30,"Eur"], [25,"Eur"], 
+    [5,"Esp"], [9,"Esp"], [0,"Eur"], [3,"Esp"], [8,"Eur"], [7,"Esp"],
+    [11,"Esp"], [45,"Esp"], [24,"Eur"], [30,"Eur"], [25,"Eur"], 
     [58,"Esp"], [60,"Esp"], [65,"Eur"], [78,"Esp"], [52,"Eur"],
-    [40,"Esp"], [33,"Eur"]
+    [40,"Esp"],
   ]
-  Y = [[0],[0],[0],[0],[0],[0],[0],[1],[1],[1],[2],[2],[1],[2],[1],[1],[0]]
+  Y = [[0],[0],[0],[0],[0],[0],[1],[1],[0],[0],[0],[2],[2],[1],[2],[1],[1]]
 
   IA = DecisionTree(X, Y, 
     ["Cont", "Catg"],
     ["UNIDADES", "DESTINO"],
+    [1,1]
     )
 
-  IA.train(4, "Gini")
+  IA.train(5, "Gini")
   print(IA.print_tree())
-
-
-            
-
-
-
