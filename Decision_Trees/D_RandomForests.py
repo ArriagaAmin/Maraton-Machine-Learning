@@ -22,7 +22,7 @@ class RandomForest:
       N = len(self.X)
       X_i, Y_i = [], []
       for _ in range(N):
-        k = randint(0, N-1):
+        k = randint(0, N-1)
         X_i.append(self.X[k])
         Y_i.append(self.Y[k])
 
@@ -40,6 +40,39 @@ class RandomForest:
       c = criterios[randint(0,1)]
 
       # Creamos un nuevo arbol
-      t = DecisionTree(X_i.copy(), Y_i.copy(), self.atr_types, self.atr_name, atr_avail.copy())
+      t = DecisionTree(X_i.copy(), Y_i.copy(), self.atr_types, self.atr_names, atr_avail.copy())
       t.train(splits, c)
+      self.trees.append(t)
       print(str(i) + "-esimo Arbol de Decision entrenado!")
+
+  def predict(self, x, trees = None):
+    """ Ponemos a los arboles a votar y la etiqueta con mas votos sera retornada. """
+    if trees == None: trees = self.trees
+
+    dic = {}
+    for t in trees:
+      r = t.predict(x)
+      if not r in dic: dic[r] = 1
+      else: dic[r] += 1
+
+    max_v = 0
+    v = None
+    for d in dic:
+      if dic[d] > max_v:
+        max_v = dic[d]
+        v = d 
+    return v
+
+  def OOB(self):
+    """ Verificamos la calidad del random forest usando el metodo Out Of Bag. """
+    acc, N = 0, 0
+    for i, x in enumerate(self.X):
+      trees = []
+      for t in self.trees:
+        if not x in t.X: trees.append(t)
+      if len(trees) > 0:
+        N += 1
+        if self.predict(x, trees) == self.Y[i][0]: acc += 1
+
+    if N == 0: return -1
+    return acc/N
