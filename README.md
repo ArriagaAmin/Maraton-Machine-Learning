@@ -14,6 +14,7 @@ Agreguen sus propias implementaciones al repo >:(
 ### K-MEANS.
  1. (Libro) Hand-On Unsupervised Learning with Python. Cap "Clustering Fundamentals"."K-Means". (A)
  2. (Libro) Hand-On Unsupervised Learning with Python. Cap "Clustering Fundamentals"."K-Nearest Neighbors".
- 3. https://www.geeksforgeeks.org/k-dimensional-tree/
- 
+ 3. https://gopalcdas.com/2017/05/24/construction-of-k-d-tree-and-using-it-for-nearest-neighbour-search/
+   * Me costo una bola eso de los KD-Trees.
+
  
