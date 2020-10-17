@@ -18,5 +18,7 @@ Agreguen sus propias implementaciones al repo >:(
  4. (Libro) Hand-On Unsupervised Learning with Python. Cap "Advanced Clustering"."Spectral clustering".
  5. https://www.mygreatlearning.com/blog/introduction-to-spectral-clustering/
  6. https://whyml.wordpress.com/2016/07/26/spectral-clustering/   (C)
- 7. Libro) Hand-On Unsupervised Learning with Python. Cap "Advanced Clustering"."Mean shift".
+ 7. (Libro) Hand-On Unsupervised Learning with Python. Cap "Advanced Clustering"."Mean shift".
  8. https://spin.atomicobject.com/2015/05/26/mean-shift-clustering/   (D)
+ 9. https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
+ 10. https://en.wikipedia.org/wiki/DBSCAN   (E)
