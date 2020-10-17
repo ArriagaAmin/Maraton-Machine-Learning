@@ -15,6 +15,8 @@ Agreguen sus propias implementaciones al repo >:(
  2. (Libro) Hand-On Unsupervised Learning with Python. Cap "Clustering Fundamentals"."K-Nearest Neighbors".
  3. https://gopalcdas.com/2017/05/24/construction-of-k-d-tree-and-using-it-for-nearest-neighbour-search/  (B)
    * Me costo una bola eso de los KD-Trees.
- 4. (Libro) Hand-On Unsupervised Learning with Python. Cap "Advanced Clustering"."Spectral Clustering".
+ 4. (Libro) Hand-On Unsupervised Learning with Python. Cap "Advanced Clustering"."Spectral clustering".
  5. https://www.mygreatlearning.com/blog/introduction-to-spectral-clustering/
  6. https://whyml.wordpress.com/2016/07/26/spectral-clustering/   (C)
+ 7. Libro) Hand-On Unsupervised Learning with Python. Cap "Advanced Clustering"."Mean shift".
+ 8. https://spin.atomicobject.com/2015/05/26/mean-shift-clustering/   (D)
