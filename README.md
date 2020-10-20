@@ -28,3 +28,9 @@ Agreguen sus propias implementaciones al repo >:(
   1. (Libro) Hand-On Unsupervised Learning with Python. Cap "Anomaly Detection"."Kernel density estimation (KDE)".  (A)
   2. (Libro) Hand-On Unsupervised Learning with Python. Cap "Anomaly Detection"."Anomaly detection with Isolation Forests".
   3. https://medium.com/@often_weird/isolation-forest-algorithm-for-anomaly-detection-f88af2d5518d   (B)
+
+## NEURAL NETWORKS INTRODUCTION
+
+## AUTOENCODERS
+  1. https://lazyprogrammer.me/a-tutorial-on-autoencoders/
+  2. https://towardsdatascience.com/denoising-autoencoders-explained-dbb82467fc2
