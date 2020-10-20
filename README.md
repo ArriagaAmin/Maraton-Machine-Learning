@@ -22,8 +22,6 @@ Agreguen sus propias implementaciones al repo >:(
   9. https://www.kdnuggets.com/2020/04/dbscan-clustering-algorithm-machine-learning.html
   10. https://en.wikipedia.org/wiki/DBSCAN   (E)
 
-    Continuara...
-
 ## ANOMALY DETECTION
   1. (Libro) Hand-On Unsupervised Learning with Python. Cap "Anomaly Detection"."Kernel density estimation (KDE)".  (A)
   2. (Libro) Hand-On Unsupervised Learning with Python. Cap "Anomaly Detection"."Anomaly detection with Isolation Forests".
@@ -33,4 +31,7 @@ Agreguen sus propias implementaciones al repo >:(
 
 ## AUTOENCODERS
   1. https://lazyprogrammer.me/a-tutorial-on-autoencoders/
-  2. https://towardsdatascience.com/denoising-autoencoders-explained-dbb82467fc2
+  2. https://towardsdatascience.com/denoising-autoencoders-explained-dbb82467fc2   (A)
+
+## GENERATIVE ADVERSARIAL NETWORKS
+  1. (Libro) Jakub Langr, Vladimir Bok - GANs in Action. Deep learning with Generative Adversarial Networks.  
